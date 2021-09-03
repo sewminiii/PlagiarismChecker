@@ -1,4 +1,4 @@
-package sillypackagenamepleasechange;
+package thePackage;
 
 public class ComparisonResult
 {

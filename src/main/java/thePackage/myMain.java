@@ -1,4 +1,4 @@
-package sillypackagenamepleasechange;
+package thePackage;
 
 import javafx.application.Application;
 import javafx.beans.property.*;
@@ -11,14 +11,14 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.*;
 
-public class SillyClassNamePleaseChange extends Application
+public class myMain extends Application
 {
     public static void main(String[] args)
     {
         Application.launch(args);
     }
     
-    private TableView<ComparisonResult> resultTable = new TableView<>();  
+    private TableView<ComparisonResult> resultTable = new TableView<>();
     private ProgressBar progressBar = new ProgressBar();
     
     @Override
