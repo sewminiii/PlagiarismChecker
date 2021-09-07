@@ -24,7 +24,7 @@ public class myMain extends Application
     @Override
     public void start(Stage stage)
     {
-        stage.setTitle("SillyWindowTitlePleaseChange");
+        stage.setTitle("Plagiarism Checker");
         stage.setMinWidth(600);
 
         // Create toolbar
@@ -84,7 +84,10 @@ public class myMain extends Application
         File directory = dc.showDialog(stage);
         
         System.out.println("Comparing files within " + directory + "...");
-        
+
+        //SEND THIS DIRECTORY TO ANOTHER FUNCTION OR CLASS AND FIND NON EMPTY FILES AND PUT THEM INTO A BLOCKING QUEUE
+        FileProducer fileProducer = new FileProducer();
+        fileProducer.offerFiles(directory);
         // Extremely fake way of demonstrating how to use the progress bar (noting that it can 
         // actually only be set to one value, from 0-1, at a time.)
         progressBar.setProgress(0.25);

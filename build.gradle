@@ -12,5 +12,5 @@ javafx {
 }
 
 application {
-    mainClass = 'sillypackagenamepleasechange.SillyClassNamePleaseChange'
+    mainClass = 'thePackage.myMain'
 }
