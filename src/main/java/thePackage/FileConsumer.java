@@ -10,9 +10,9 @@ public class FileConsumer {
     private List<File> fileList = new ArrayList<>();
     private File file1, file2;
 
-    public FileConsumer(FileProducer producer)
+    public FileConsumer()
     {
-        this.producer = producer;
+
     }
 
     public void getFiles() {
@@ -33,8 +33,7 @@ public class FileConsumer {
         Boolean[][] directionLeft = new Boolean[file1.length + 1][file2.length + 1];
         subsolutions[0][0] = 0;
 
-        for(int i = 1; i <= file1.length ;i++)
-        {
+        for(int i = 1; i <= file1.length ;i++) {
             for(int j = 1; j <= file2.length; j++)
             {
                 if(file1[i - 1] == file2[j - 1])
@@ -72,8 +71,9 @@ public class FileConsumer {
         System.out.println("matches = "+matches);
         System.out.println("file1 length = "+file1.length);
         System.out.println("file2 length = "+file2.length);
-
-        return (matches * 2) / (file1.length + file2.length);
+        double result = (matches * 2) / (file1.length + file2.length);
+        System.out.println("similarity score = "+result);
+        return result;
 
     }
 

@@ -89,7 +89,7 @@ public class myMain extends Application
         FileProducer fileProducer = new FileProducer();
         fileProducer.offerFiles(directory);
         //TEMPORARY
-        FileConsumer fileConsumer = new FileConsumer(fileProducer);
+        FileConsumer fileConsumer = new FileConsumer();
         fileConsumer.getFiles();
 
         // Extremely fake way of demonstrating how to use the progress bar (noting that it can 
