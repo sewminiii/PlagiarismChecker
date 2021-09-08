@@ -88,9 +88,6 @@ public class myMain extends Application
         //SEND THIS DIRECTORY TO ANOTHER FUNCTION OR CLASS AND FIND NON EMPTY FILES AND PUT THEM INTO A BLOCKING QUEUE
         FileProducer fileProducer = new FileProducer();
         fileProducer.offerFiles(directory);
-        //TEMPORARY
-        FileConsumer fileConsumer = new FileConsumer();
-        fileConsumer.getFiles();
 
         // Extremely fake way of demonstrating how to use the progress bar (noting that it can 
         // actually only be set to one value, from 0-1, at a time.)
@@ -115,5 +112,7 @@ public class myMain extends Application
     private void stopComparison()
     {
         System.out.println("Stopping comparison...");
+        Calculations calcObj = new Calculations();
+        calcObj.end();
     }
 }

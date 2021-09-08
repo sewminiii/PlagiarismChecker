@@ -4,29 +4,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileConsumer {
-
-    private FileProducer producer;
-    private List<File> fileList = new ArrayList<>();
-    private File file1, file2;
-
-    public FileConsumer()
-    {
-
-    }
-
-    public void getFiles() {
-      /*  fileList = producer.returnFileList();
-        System.out.println("file list form consumer = "+fileList);
-
-        for(int i = 0; i < fileList.size(); i++){
-            for(int j = i+1 ; j <= fileList.size(); j++){
-                file1 = fileList.get(i);
-                file2 = fileList.get(j);
-                System.out.println("file 1 = "+file1 + " file 2 = "+file2);
-            }
-        }*/
-    }
+public class Calculations {
+    //TEMPPPP
+    Thread thread;
 
     public double calcSimilarity(char[] file1, char[] file2){
         int[][] subsolutions = new int[file1.length + 1][file2.length + 1];
@@ -73,8 +53,19 @@ public class FileConsumer {
         System.out.println("file2 length = "+file2.length);
         double result = (matches * 2) / (file1.length + file2.length);
         System.out.println("similarity score = "+result);
+
         return result;
 
+    }
+
+
+
+    public void end(){
+        if(thread == null){
+            throw new IllegalStateException();
+        }
+        thread.interrupt();
+        thread = null;
     }
 
 }

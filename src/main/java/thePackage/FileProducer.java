@@ -99,9 +99,37 @@ public class FileProducer{
                 }
 
                 //call similarity method
-                FileConsumer consumer = new FileConsumer();
-                consumer.calcSimilarity(charArray1,charArray2);
+                Calculations consumer = new Calculations();
+                double result = consumer.calcSimilarity(charArray1,charArray2);
+
+                writeToCSV(file1,file2,result);
             }
+        }
+
+    }
+
+    public void writeToCSV(File f1, File f2, double similarity){
+        //File csvFile = new File("results.csv");
+        try (PrintWriter writer = new PrintWriter(new FileWriter("results.csv",true))) {
+            String fileName1 = f1.getName();
+            String fileName2 = f2.getName();
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(fileName1);
+            sb.append(',');
+            sb.append(fileName2);
+            sb.append(',');
+            sb.append(similarity);
+            sb.append('\n');
+
+            writer.write(sb.toString());
+
+            System.out.println("done!");
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
