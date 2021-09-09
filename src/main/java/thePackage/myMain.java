@@ -18,8 +18,8 @@ public class myMain extends Application
         Application.launch(args);
     }
     
-    private TableView<ComparisonResult> resultTable = new TableView<>();
-    private ProgressBar progressBar = new ProgressBar();
+    private final TableView<ComparisonResult> resultTable = new TableView<>();
+    private final ProgressBar progressBar = new ProgressBar();
     
     @Override
     public void start(Stage stage)
@@ -91,11 +91,11 @@ public class myMain extends Application
 
         // Extremely fake way of demonstrating how to use the progress bar (noting that it can 
         // actually only be set to one value, from 0-1, at a time.)
-        progressBar.setProgress(0.25);
-        progressBar.setProgress(0.5);
+        //progressBar.setProgress(0.25);
+       /* progressBar.setProgress(0.5);
         progressBar.setProgress(0.6);
         progressBar.setProgress(0.85);
-        progressBar.setProgress(1.0);
+        progressBar.setProgress(1.0);*/
 
         // Extremely fake way of demonstrating how to update the table (noting that this shouldn't
         // just happen once at the end, but progressively as each result is obtained.)
@@ -106,22 +106,27 @@ public class myMain extends Application
         newResults.add(new ComparisonResult("Example File 2", "Example File 3", 0.45));
 
         resultTable.getItems().setAll(newResults);*/
-        
+        //resultTable.getItems().add(new ComparisonResult("file1","file2",0.6));
         // progressBar.setProgress(0.0); // Reset progress bar after successful comparison?
     }
     public void displayResults(ComparisonResult obj){
-        List<ComparisonResult> newResults = new ArrayList<>();
-        newResults.add(new ComparisonResult(obj.getFile1(), obj.getFile2(), obj.getSimilarity()));
+       /* List<ComparisonResult> newResults = new ArrayList<>();
+        newResults.add(new ComparisonResult(obj.getFile1(), obj.getFile2(), obj.getSimilarity()));*/
         System.out.println("print file 1: "+obj.getFile1());
-        resultTable.getItems().setAll(newResults);
+        System.out.println("print similarity: "+obj.getSimilarity());
+        resultTable.getItems().add(obj);
+    }
+    public void displayProgress(double progress){
+        System.out.println("progress = "+progress);
+        progressBar.setProgress(progress);
     }
     
     private void stopComparison()
     {
         System.out.println("Stopping comparison...");
-        ComparisonLogics calcObj = new ComparisonLogics();
+        ComparisonLogics calcObj = new ComparisonLogics(new myMain());
         FileProducer prodObj = new FileProducer();
-        prodObj.end();
+        //prodObj.end();
         calcObj.end();
     }
 }

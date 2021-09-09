@@ -14,6 +14,7 @@ public class FileProducer{
    /* private final ExecutorService cpuService = Executors.newCachedThreadPool();
     private final ExecutorService ioService = Executors.newCachedThreadPool();*/
     private List<File> fileList = new ArrayList<>();
+    myMain ui = new myMain();
     private File returnFile;
 
     private Thread producerThread;
@@ -51,7 +52,7 @@ public class FileProducer{
                 }
                 System.out.println("file list = " + fileList);
             }
-            ComparisonLogics comparisonLogics = new ComparisonLogics();
+            ComparisonLogics comparisonLogics = new ComparisonLogics(ui);
             comparisonLogics.combinations(fileList);
         };
         producerThread = new Thread(consumer,"consumer thread");
@@ -61,7 +62,12 @@ public class FileProducer{
 
     public void end(){
         System.out.println("call shut down in logic");
+        if(producerThread == null){
+            System.out.println("producer thread interrupted");
+            throw new IllegalStateException();
+        }
         producerThread.interrupt();
+        producerThread = null;
     }
 
 
