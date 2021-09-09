@@ -45,7 +45,7 @@ public class myMain extends Application
         
         // The following tell JavaFX how to extract information from a ComparisonResult 
         // object and put it into the three table columns.
-        file1Col.setCellValueFactory(   
+        file1Col.setCellValueFactory(
             (cell) -> new SimpleStringProperty(cell.getValue().getFile1()) );
             
         file2Col.setCellValueFactory(   
@@ -99,14 +99,21 @@ public class myMain extends Application
 
         // Extremely fake way of demonstrating how to update the table (noting that this shouldn't
         // just happen once at the end, but progressively as each result is obtained.)
+
         List<ComparisonResult> newResults = new ArrayList<>();
         newResults.add(new ComparisonResult("Example File 1", "Example File 2", 0.75));
         newResults.add(new ComparisonResult("Example File 1", "Example File 3", 0.31));
         newResults.add(new ComparisonResult("Example File 2", "Example File 3", 0.45));
-        
-        resultTable.getItems().setAll(newResults);        
+
+        resultTable.getItems().setAll(newResults);
         
         // progressBar.setProgress(0.0); // Reset progress bar after successful comparison?
+    }
+    public void displayResults(List<ComparisonResult> list){
+        System.out.println("set all");
+        //System.out.println(list.get(0));
+        resultTable.getItems().setAll(list);
+
     }
     
     private void stopComparison()
