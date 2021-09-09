@@ -119,7 +119,7 @@ public class myMain extends Application
     private void stopComparison()
     {
         System.out.println("Stopping comparison...");
-        Calculations calcObj = new Calculations();
+        ComparisonLogics calcObj = new ComparisonLogics();
         calcObj.end();
     }
 }
