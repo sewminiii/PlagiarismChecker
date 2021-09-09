@@ -100,26 +100,28 @@ public class myMain extends Application
         // Extremely fake way of demonstrating how to update the table (noting that this shouldn't
         // just happen once at the end, but progressively as each result is obtained.)
 
-        List<ComparisonResult> newResults = new ArrayList<>();
+       /* List<ComparisonResult> newResults = new ArrayList<>();
         newResults.add(new ComparisonResult("Example File 1", "Example File 2", 0.75));
         newResults.add(new ComparisonResult("Example File 1", "Example File 3", 0.31));
         newResults.add(new ComparisonResult("Example File 2", "Example File 3", 0.45));
 
-        resultTable.getItems().setAll(newResults);
+        resultTable.getItems().setAll(newResults);*/
         
         // progressBar.setProgress(0.0); // Reset progress bar after successful comparison?
     }
-    public void displayResults(List<ComparisonResult> list){
-        System.out.println("set all");
-        //System.out.println(list.get(0));
-        resultTable.getItems().setAll(list);
-
+    public void displayResults(ComparisonResult obj){
+        List<ComparisonResult> newResults = new ArrayList<>();
+        newResults.add(new ComparisonResult(obj.getFile1(), obj.getFile2(), obj.getSimilarity()));
+        System.out.println("print file 1: "+obj.getFile1());
+        resultTable.getItems().setAll(newResults);
     }
     
     private void stopComparison()
     {
         System.out.println("Stopping comparison...");
         ComparisonLogics calcObj = new ComparisonLogics();
+        FileProducer prodObj = new FileProducer();
+        prodObj.end();
         calcObj.end();
     }
 }

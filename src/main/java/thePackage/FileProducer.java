@@ -3,11 +3,16 @@ package thePackage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class FileProducer{
     private final BlockingQueue<File> fileListBlockingQueue = new ArrayBlockingQueue<>(100);
+   /* private final ExecutorService cpuService = Executors.newCachedThreadPool();
+    private final ExecutorService ioService = Executors.newCachedThreadPool();*/
     private List<File> fileList = new ArrayList<>();
     private File returnFile;
 
@@ -54,7 +59,10 @@ public class FileProducer{
 
     }
 
-
+    public void end(){
+        System.out.println("call shut down in logic");
+        producerThread.interrupt();
+    }
 
 
 
