@@ -49,114 +49,53 @@ public class ComparisonLogics {
         double progress = count / noOfComparison;
         Formatter formatter = new Formatter();
         formatter.format("%.2f", progress);
+
         Platform.runLater(() -> {
             this.ui.displayProgress(progress);
         });
     }
 
     public void convertToCharArray(File file1, File file2) throws ExecutionException, InterruptedException {
-        ioService.execute(()->{
-            StringBuilder theStringForFile1;
-            Scanner scanner1;
-            try {
-                scanner1 = new Scanner(file1);
-                theStringForFile1 = new StringBuilder(scanner1.nextLine());
-                while (scanner1.hasNextLine()) {
-                    theStringForFile1.append("\n").append(scanner1.nextLine());
-                }
-                charArray1 = theStringForFile1.toString().toCharArray();
-                for (char c : charArray1)
-                    System.out.print(c);
-                System.out.println("");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+
+        StringBuilder theStringForFile1;
+        Scanner scanner1;
+        try {
+            scanner1 = new Scanner(file1);
+            theStringForFile1 = new StringBuilder(scanner1.nextLine());
+            while (scanner1.hasNextLine()) {
+                theStringForFile1.append("\n").append(scanner1.nextLine());
             }
-            StringBuilder theStringForFile2 = new StringBuilder();
-            Scanner scanner2 = null;
-            try {
-                scanner2 = new Scanner(file2);
-                theStringForFile2 = new StringBuilder(scanner2.nextLine());
-                while (scanner2.hasNextLine()) {
-                    theStringForFile2.append("\n").append(scanner2.nextLine());
-                }
-                charArray2 = theStringForFile2.toString().toCharArray();
-                for (char c : charArray2)
-                    System.out.print(c);
-                System.out.println("");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            Future<Double> future = cpuService.submit(new Task());
-
-            try {
-                result = future.get();
-
-                System.out.println("result in future : "+future.get());
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-            myMain main = new myMain();
-            displayResults(file1,file2,result);
-            writeToCSV(file1,file2,result);
-
-        });
-    }
-
-    public class Task implements Callable<Double>{
-        @Override
-        public Double call() throws Exception {
-            for (char c : charArray2)
-                System.out.print(c);
-            System.out.println("");
-            for (char c : charArray2)
-                System.out.print(c);
-            System.out.println("");
-            return calcSimilarity(charArray1,charArray2);
+            charArray1 = theStringForFile1.toString().toCharArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-    }
-
-
-    public double calcSimilarity(char[] file1, char[] file2){
-        int[][] subsolutions = new int[file1.length + 1][file2.length + 1];
-        Boolean[][] directionLeft = new Boolean[file1.length + 1][file2.length + 1];
-        subsolutions[0][0] = 0;
-
-        for (int i = 1; i <= file1.length; i++) {
-            for (int j = 1; j <= file2.length; j++) {
-                if (file1[i - 1] == file2[j - 1])
-                    subsolutions[i][j] = subsolutions[i - 1][j - 1] + 1;
-                else if (subsolutions[i - 1][j] > subsolutions[i][j - 1]) {
-                    subsolutions[i][j] = subsolutions[i - 1][j];
-                    directionLeft[i][j] = true;
-                } else {
-                    subsolutions[i][j] = subsolutions[i][j - 1];
-                    directionLeft[i][j] = false;
-                }
+        StringBuilder theStringForFile2 = new StringBuilder();
+        Scanner scanner2 = null;
+        try {
+            scanner2 = new Scanner(file2);
+            theStringForFile2 = new StringBuilder(scanner2.nextLine());
+            while (scanner2.hasNextLine()) {
+                theStringForFile2.append("\n").append(scanner2.nextLine());
             }
+            charArray2 = theStringForFile2.toString().toCharArray();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        double matches = 0;
-        int i = file1.length;
-        int j = file2.length;
+        //calling call() method in Calculations class and get the return value (similarity score)
+        Future<Double> future = cpuService.submit(new Calculations(charArray1,charArray2));
 
-        while (i > 0 && j > 0) {
-            if (file1[i - 1] == file2[j - 1]) {
-                matches += 1;
-                i -= 1;
-                j -= 1;
-            } else if (directionLeft[i][j])
-                i -= 1;
+        try {
+            result = future.get();
 
-            else
-                j -= 1;
-        };
-        /*System.out.println("matches = "+matches);
-        System.out.println("file1 length = "+file1.length);
-        System.out.println("file2 length = "+file2.length);*/
-        result = (matches * 2) / (file1.length + file2.length);
-        System.out.println("similarity score = "+result);
-        return result;
+            System.out.println("result in future : "+future.get());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        displayResults(file1,file2,result);
+        writeToCSV(file1,file2,result);
+
     }
+
     public void displayResults(File f1, File f2, double similarity){
         if(similarity > 0.5){
             String fileName1 = f1.getName();

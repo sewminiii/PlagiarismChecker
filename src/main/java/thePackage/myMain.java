@@ -88,37 +88,14 @@ public class myMain extends Application
         System.out.println("Comparing files within " + directory + "...");
 
         //SEND THIS DIRECTORY TO ANOTHER FUNCTION OR CLASS AND FIND NON EMPTY FILES AND PUT THEM INTO A BLOCKING QUEUE
-        BlockingQ blockingQ = new BlockingQ();
+        BlockingQ blockingQ = new BlockingQ(this);
         blockingQ.offerFiles(directory);
-
-
-        // Extremely fake way of demonstrating how to use the progress bar (noting that it can 
-        // actually only be set to one value, from 0-1, at a time.)
-        //progressBar.setProgress(0.25);
-       /* progressBar.setProgress(0.5);
-        progressBar.setProgress(0.6);
-        progressBar.setProgress(0.85);
-        progressBar.setProgress(1.0);*/
-
-        // Extremely fake way of demonstrating how to update the table (noting that this shouldn't
-        // just happen once at the end, but progressively as each result is obtained.)
-
-       /*List<ComparisonResult> newResults = new ArrayList<>();
-        newResults.add(new ComparisonResult("Example File 1", "Example File 2", 0.6808510638297872));
-        newResults.add(new ComparisonResult("Example File 1", "Example File 3",0.6808510638297872 ));
-        newResults.add(new ComparisonResult("Example File 2", "Example File 3", 0.45));
-
-        resultTable.getItems().setAll(newResults);*/
-        //resultTable.getItems().add(new ComparisonResult("file1","file2",0.6));
-        // progressBar.setProgress(0.0); // Reset progress bar after successful comparison?
     }
     public void displayResults(ComparisonResult obj){
-        /*List<ComparisonResult> newResults = new ArrayList<>();
-        newResults.add(new ComparisonResult(obj.getFile1(), obj.getFile2(), obj.getSimilarity()));
-        resultTable.getItems().setAll(newResults);*/
         System.out.println("print file 1: "+obj.getFile1());
+        System.out.println("print file 2: "+obj.getFile2());
         System.out.println("print similarity: "+obj.getSimilarity());
-        System.out.println("hiiiiiiiii");
+
         resultTable.getItems().add(obj);
     }
     public void displayProgress(double progress){
@@ -130,9 +107,10 @@ public class myMain extends Application
     {
         System.out.println("Stopping comparison...");
         ComparisonLogics calcObj = new ComparisonLogics(new myMain());
-        BlockingQ prodObj = new BlockingQ();
-        //prodObj.end();
+        BlockingQ prodObj = new BlockingQ(this);
         calcObj.end();
+        prodObj.end();
+
     }
 
     /*public void displayResults(File f1, File f2, double similarity){

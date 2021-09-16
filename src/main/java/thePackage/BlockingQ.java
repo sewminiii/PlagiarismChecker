@@ -14,12 +14,19 @@ public class BlockingQ {
    /* private final ExecutorService cpuService = Executors.newCachedThreadPool();
     private final ExecutorService ioService = Executors.newCachedThreadPool();*/
     private List<File> fileList = new ArrayList<>();
-    myMain ui = new myMain();
+    myMain ui;
+    File directory;
     private File returnFile;
+    public Thread thread;
 
-    private Thread thread;
+    public BlockingQ(myMain ui){
+        this.ui = ui;
+        //this.directory = directory;
+    }
+    public BlockingQ(){}
 
     public void offerFiles(File directory) {
+        System.out.println("first thread : "+thread);
         Runnable producer = () -> {
             try {
                 File[] listOfFiles = directory.listFiles();
@@ -31,9 +38,14 @@ public class BlockingQ {
                         System.out.println("blocking q = "+fileListBlockingQueue);
                     }
                 }
+                System.out.println("thread : "+thread);
+
             }catch (NullPointerException | InterruptedException e){
-                e.printStackTrace();
+                //e.printStackTrace();
+                System.out.println("Producer thread interrupted");
             }
+
+            //System.out.println("thread : "+thread);
             getNextFile();
 
         };
@@ -42,18 +54,20 @@ public class BlockingQ {
     }
 
     public void getNextFile() {
+        System.out.println("thread : "+thread);
         Runnable consumer =() -> {
             while (!fileListBlockingQueue.isEmpty()) {
                 try {
                     returnFile = fileListBlockingQueue.take();
                     fileList.add(returnFile);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    System.out.println("Consumer thread interrupted");
                 }
                 System.out.println("file list = " + fileList);
             }
-            ComparisonLogics comparisonLogics = new ComparisonLogics(ui);
+            ComparisonLogics comparisonLogics = new ComparisonLogics(this.ui);
             comparisonLogics.combinations(fileList);
+           // System.out.println("thread : "+thread);
         };
         thread = new Thread(consumer,"consumer thread");
         thread.start();
@@ -61,12 +75,12 @@ public class BlockingQ {
     }
 
     public void end(){
-        System.out.println("call shut down in logic");
-        if(thread == null){
-            System.out.println("producer thread interrupted");
+        System.out.println("current thread = "+thread);
+       if(thread == null){
             throw new IllegalStateException();
         }
         thread.interrupt();
+        System.out.println("producer thread interrupted");
         thread = null;
     }
 
