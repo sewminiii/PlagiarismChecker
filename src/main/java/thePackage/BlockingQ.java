@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FileProducer{
+public class BlockingQ {
     private final BlockingQueue<File> fileListBlockingQueue = new ArrayBlockingQueue<>(100);
    /* private final ExecutorService cpuService = Executors.newCachedThreadPool();
     private final ExecutorService ioService = Executors.newCachedThreadPool();*/
@@ -17,7 +17,7 @@ public class FileProducer{
     myMain ui = new myMain();
     private File returnFile;
 
-    private Thread producerThread;
+    private Thread thread;
 
     public void offerFiles(File directory) {
         Runnable producer = () -> {
@@ -37,8 +37,8 @@ public class FileProducer{
             getNextFile();
 
         };
-        producerThread = new Thread(producer,"producer thread");
-        producerThread.start();
+        thread = new Thread(producer,"producer thread");
+        thread.start();
     }
 
     public void getNextFile() {
@@ -55,19 +55,19 @@ public class FileProducer{
             ComparisonLogics comparisonLogics = new ComparisonLogics(ui);
             comparisonLogics.combinations(fileList);
         };
-        producerThread = new Thread(consumer,"consumer thread");
-        producerThread.start();
+        thread = new Thread(consumer,"consumer thread");
+        thread.start();
 
     }
 
     public void end(){
         System.out.println("call shut down in logic");
-        if(producerThread == null){
+        if(thread == null){
             System.out.println("producer thread interrupted");
             throw new IllegalStateException();
         }
-        producerThread.interrupt();
-        producerThread = null;
+        thread.interrupt();
+        thread = null;
     }
 
 
