@@ -3,30 +3,25 @@ package thePackage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class BlockingQ {
+
+public class FilesLogics {
     private final BlockingQueue<File> fileListBlockingQueue = new ArrayBlockingQueue<>(100);
-   /* private final ExecutorService cpuService = Executors.newCachedThreadPool();
-    private final ExecutorService ioService = Executors.newCachedThreadPool();*/
     private List<File> fileList = new ArrayList<>();
     myMain ui;
-    File directory;
     private File returnFile;
-    public Thread thread;
+    private Thread file_producer_thread,file_consumer_thread;
 
-    public BlockingQ(myMain ui){
+    public FilesLogics(myMain ui){
         this.ui = ui;
         //this.directory = directory;
     }
-    public BlockingQ(){}
+
 
     public void offerFiles(File directory) {
-        System.out.println("first thread : "+thread);
+        System.out.println("first thread : "+file_producer_thread);
         Runnable producer = () -> {
             try {
                 File[] listOfFiles = directory.listFiles();
@@ -38,7 +33,7 @@ public class BlockingQ {
                         System.out.println("blocking q = "+fileListBlockingQueue);
                     }
                 }
-                System.out.println("thread : "+thread);
+                System.out.println("thread : "+file_producer_thread);
 
             }catch (NullPointerException | InterruptedException e){
                 //e.printStackTrace();
@@ -49,12 +44,12 @@ public class BlockingQ {
             getNextFile();
 
         };
-        thread = new Thread(producer,"producer thread");
-        thread.start();
+        file_producer_thread = new Thread(producer,"producer thread");
+        file_producer_thread.start();
     }
 
     public void getNextFile() {
-        System.out.println("thread : "+thread);
+        System.out.println("thread : "+file_consumer_thread);
         Runnable consumer =() -> {
             while (!fileListBlockingQueue.isEmpty()) {
                 try {
@@ -66,22 +61,17 @@ public class BlockingQ {
                 System.out.println("file list = " + fileList);
             }
             ComparisonLogics comparisonLogics = new ComparisonLogics(this.ui);
-            comparisonLogics.combinations(fileList);
+            comparisonLogics.fileCombinations(fileList);
            // System.out.println("thread : "+thread);
         };
-        thread = new Thread(consumer,"consumer thread");
-        thread.start();
+        file_consumer_thread = new Thread(consumer,"consumer thread");
+        file_consumer_thread.start();
 
     }
 
     public void end(){
-        System.out.println("current thread = "+thread);
-       if(thread == null){
-            throw new IllegalStateException();
-        }
-        thread.interrupt();
-        System.out.println("producer thread interrupted");
-        thread = null;
+        System.out.println("current thread = "+Thread.currentThread());
+        Thread.currentThread().interrupt();
     }
 
 

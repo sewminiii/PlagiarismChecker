@@ -1,7 +1,6 @@
 package thePackage;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -10,8 +9,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class myMain extends Application
 {
@@ -88,8 +85,8 @@ public class myMain extends Application
         System.out.println("Comparing files within " + directory + "...");
 
         //SEND THIS DIRECTORY TO ANOTHER FUNCTION OR CLASS AND FIND NON EMPTY FILES AND PUT THEM INTO A BLOCKING QUEUE
-        BlockingQ blockingQ = new BlockingQ(this);
-        blockingQ.offerFiles(directory);
+        FilesLogics filesLogics = new FilesLogics(this);
+        filesLogics.offerFiles(directory);
     }
     public void displayResults(ComparisonResult obj){
         System.out.println("print file 1: "+obj.getFile1());
@@ -107,7 +104,7 @@ public class myMain extends Application
     {
         System.out.println("Stopping comparison...");
         ComparisonLogics calcObj = new ComparisonLogics(new myMain());
-        BlockingQ prodObj = new BlockingQ(this);
+        FilesLogics prodObj = new FilesLogics(this);
         calcObj.end();
         prodObj.end();
 

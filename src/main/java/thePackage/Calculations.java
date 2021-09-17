@@ -3,12 +3,17 @@ package thePackage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
-public class Calculations {
-    //TEMPPPP
-    Thread thread;
+public class Calculations implements Callable<Double> {
+    private char[] file1, file2;
 
-    public double calcSimilarity(char[] file1, char[] file2){
+    public Calculations(char[] file1, char[] file2){
+        this.file1 = file1;
+        this.file2 = file2;
+    }
+    @Override
+    public Double call() throws Exception {
         int[][] subsolutions = new int[file1.length + 1][file2.length + 1];
         Boolean[][] directionLeft = new Boolean[file1.length + 1][file2.length + 1];
         subsolutions[0][0] = 0;
@@ -60,12 +65,13 @@ public class Calculations {
 
 
 
-    public void end(){
+   /* public void end(){
         if(thread == null){
             throw new IllegalStateException();
         }
         thread.interrupt();
         thread = null;
-    }
+    }*/
+
 
 }

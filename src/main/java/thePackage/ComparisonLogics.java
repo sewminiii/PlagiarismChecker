@@ -24,7 +24,7 @@ public class ComparisonLogics {
         this.ui = ui;
     }
 
-    public void combinations(List<File> fileList){
+    public void fileCombinations(List<File> fileList){
 
         System.out.println("file list size = "+fileList.size());
         cpuService.execute(() -> {
@@ -44,16 +44,7 @@ public class ComparisonLogics {
             }
         });
     }
-    public void calcProgress(int noOfFiles, int count){
-        double noOfComparison = 0.5 * (noOfFiles * noOfFiles - noOfFiles);
-        double progress = count / noOfComparison;
-        Formatter formatter = new Formatter();
-        formatter.format("%.2f", progress);
 
-        Platform.runLater(() -> {
-            this.ui.displayProgress(progress);
-        });
-    }
 
     public void convertToCharArray(File file1, File file2) throws ExecutionException, InterruptedException {
 
@@ -106,6 +97,18 @@ public class ComparisonLogics {
             });
 
         }
+    }
+    public void calcProgress(int noOfFiles, int count){
+        cpuService.execute(() -> {
+            double noOfComparison = 0.5 * (noOfFiles * noOfFiles - noOfFiles);
+            double progress = count / noOfComparison;
+            Formatter formatter = new Formatter();
+            formatter.format("%.2f", progress);
+
+            Platform.runLater(() -> {
+                this.ui.displayProgress(progress);
+            });
+        });
     }
 
     public void writeToCSV(File f1, File f2, double similarity){
