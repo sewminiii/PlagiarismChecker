@@ -52,12 +52,7 @@ public class Calculations implements Callable<Double> {
             else
                 j -= 1;
         }
-        System.out.println("matches = "+matches);
-        System.out.println("file1 length = "+file1.length);
-        System.out.println("file2 length = "+file2.length);
         double result = (matches * 2) / (file1.length + file2.length);
-        System.out.println("similarity score = "+result);
-
         return result;
 
     }
