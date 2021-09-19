@@ -3,7 +3,6 @@ package thePackage;
 import javafx.application.Platform;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.List;
 import java.util.Scanner;
@@ -14,16 +13,22 @@ public class ComparisonLogics {
     private final ExecutorService ioService = Executors.newCachedThreadPool();
     private char[] charArray1, charArray2;
     private int counter = 0;
-    myMain ui;
-    //Thread thread;
+    private myMain ui;
     public double result;
-
-    //public ComparisonLogics(){}
 
     public ComparisonLogics(myMain ui){
         this.ui = ui;
     }
 
+    //this method is for making the file combinations
+    //a file should be compared with each file but should avoid redundant
+    /* that is achieved by,
+     * in the list, each file should compare only with the files which are in the highest indexes
+     * than the comparing file's index of the list
+     * Assume, there are 3 files in the list, so the file in the index 0 should be compared with only index 1 and 2,
+     * and the file in the index 1 should be compared with only index 2
+     * because index 1 has already compared with index 0 in the previous round
+     * */
     public void fileCombinations(List<File> fileList){
 
         System.out.println("file list size = "+fileList.size());
@@ -45,12 +50,12 @@ public class ComparisonLogics {
         });
     }
 
-
+    //this method is for put the file contents to a char array in order to pass for comparing
     public void convertToCharArray(File file1, File file2) throws ExecutionException, InterruptedException {
-
         StringBuilder theStringForFile1;
         Scanner scanner1;
         try {
+            //read the file one and put them into a char array
             scanner1 = new Scanner(file1);
             theStringForFile1 = new StringBuilder(scanner1.nextLine());
             while (scanner1.hasNextLine()) {
@@ -63,6 +68,7 @@ public class ComparisonLogics {
         StringBuilder theStringForFile2 = new StringBuilder();
         Scanner scanner2 = null;
         try {
+            //read the file two and put them into another char array
             scanner2 = new Scanner(file2);
             theStringForFile2 = new StringBuilder(scanner2.nextLine());
             while (scanner2.hasNextLine()) {
@@ -77,7 +83,6 @@ public class ComparisonLogics {
 
         try {
             result = future.get();
-
             System.out.println("result in future : "+future.get());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -87,30 +92,38 @@ public class ComparisonLogics {
 
     }
 
+    //this method is for passing the comparison results to the main class in order to display in the interface
     public void displayResults(File f1, File f2, double similarity){
+        //check the similarity score
+        //if the score is greater than 0.5 only the results are displayed
         if(similarity > 0.5){
             String fileName1 = f1.getName();
             String fileName2 = f2.getName();
             ComparisonResult comparisonResults = new ComparisonResult(fileName1,fileName2,similarity);
+            //call a method in main class
             Platform.runLater(() ->{
                 ui.displayResults(comparisonResults);
             });
 
         }
     }
+    //this method is for calculate the current progress
     public void calcProgress(int noOfFiles, int count){
         cpuService.execute(() -> {
+            //get the number of comparisons by no of files in the list to be compared
             double noOfComparison = 0.5 * (noOfFiles * noOfFiles - noOfFiles);
+            //count is the current comparison number which is comparing at the moment
             double progress = count / noOfComparison;
             Formatter formatter = new Formatter();
             formatter.format("%.2f", progress);
-
+            //call a method in main class
             Platform.runLater(() -> {
                 this.ui.displayProgress(progress);
             });
         });
     }
 
+    //this method is for writing the results to a csv file
     public void writeToCSV(File f1, File f2, double similarity){
         ioService.execute(()->{
             try (PrintWriter writer = new PrintWriter(new FileWriter("results.csv",true))) {
@@ -136,6 +149,7 @@ public class ComparisonLogics {
         });
     }
 
+    //stop thread pools
     public void end(){
         System.out.println("shut down cpu intensive thread pool");
         System.out.println("shut down IO intensive thread pool");

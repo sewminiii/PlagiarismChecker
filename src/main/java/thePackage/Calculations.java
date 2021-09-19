@@ -1,17 +1,16 @@
 package thePackage;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 public class Calculations implements Callable<Double> {
     private char[] file1, file2;
 
+    //constructor
     public Calculations(char[] file1, char[] file2){
         this.file1 = file1;
         this.file2 = file2;
     }
+    //this is the LCS algorithm
     @Override
     public Double call() throws Exception {
         int[][] subsolutions = new int[file1.length + 1][file2.length + 1];
@@ -62,16 +61,5 @@ public class Calculations implements Callable<Double> {
         return result;
 
     }
-
-
-
-   /* public void end(){
-        if(thread == null){
-            throw new IllegalStateException();
-        }
-        thread.interrupt();
-        thread = null;
-    }*/
-
 
 }

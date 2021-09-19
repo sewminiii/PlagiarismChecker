@@ -84,24 +84,22 @@ public class myMain extends Application
         
         System.out.println("Comparing files within " + directory + "...");
 
-        //SEND THIS DIRECTORY TO ANOTHER FUNCTION OR CLASS AND FIND NON EMPTY FILES AND PUT THEM INTO A BLOCKING QUEUE
+        //call offerFiles method in FilesLogics class
         FilesLogics filesLogics = new FilesLogics(this);
         filesLogics.offerFiles(directory);
     }
     public void displayResults(ComparisonResult obj){
-        System.out.println("print file 1: "+obj.getFile1());
-        System.out.println("print file 2: "+obj.getFile2());
-        System.out.println("print similarity: "+obj.getSimilarity());
-
+        //add comparisons results to the table view
         resultTable.getItems().add(obj);
     }
     public void displayProgress(double progress){
-        System.out.println("progress = "+progress);
+        //set the progress bar
         progressBar.setProgress(progress);
     }
     
     private void stopComparison()
     {
+        //call end methods which are responsible for stop the threads
         System.out.println("Stopping comparison...");
         ComparisonLogics calcObj = new ComparisonLogics(new myMain());
         FilesLogics prodObj = new FilesLogics(this);
@@ -109,16 +107,4 @@ public class myMain extends Application
         prodObj.end();
 
     }
-
-    /*public void displayResults(File f1, File f2, double similarity){
-        if(similarity > 0.5){
-            String fileName1 = f1.getName();
-            String fileName2 = f2.getName();
-            ComparisonResult comparisonResults = new ComparisonResult(fileName1,fileName2,similarity);
-            Platform.runLater(() ->{
-                displayResults2(comparisonResults);
-            });
-
-        }
-    }*/
 }
